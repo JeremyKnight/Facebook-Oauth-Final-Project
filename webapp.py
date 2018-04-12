@@ -12,12 +12,16 @@ facebook = oauth.remote_app('facebook',
     consumer_key= os.environ['FACEBOOK_APP_ID'],
     consumer_secret= os.environ['FACEBOOK_APP_SECRET'],
     request_token_params={'scope': 'email'}
-    access_token_method='POST',
 )
 
 @app.route("/")
 def render_main():
     return render_template('home.html')
+
+@app.route('/login')
+def login():
+    return facebook.authorize(callback=url_for('authorized', _external=True, _scheme='https')) #callback URL must match the pre-configured callback URL
+
 
 if __name__=="__main__":
     app.run(debug=False)
