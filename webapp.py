@@ -1,4 +1,4 @@
-from flask import Flask, url_for, render_template, request, session
+from flask import Flask, url_for, render_template, request
 from flask_oauthlib.client import OAuth
 from flask import render_template
 
@@ -31,35 +31,40 @@ def login():
 @app.route('/authorized')
 def authorized(resp):
     #the facebook lines might not work
-    next_url = request.args.get('next') or url_for('index')
+    # next_url = request.args.get('next') or url_for('index')
+    # if resp is None:
+    #     flash(u'You denied the request to sign in.')
+    #     session.clear()
+    #     return redirect(next_url)
+    #
+    # session['facebook_token'] = (
+    #     resp['oauth_token'],
+    #     resp['oauth_token_secret']
+    # )
+    # session['facebook_user'] = resp['screen_name']
+    #
+    # flash('You were signed in as %s' % resp['screen_name'])
+    # return redirect(next_url)
+
+    resp = facebook.authorized_response()
     if resp is None:
-        flash(u'You denied the request to sign in.')
-        session.clear()
-        return redirect(next_url)
-
-    session['facebook_token'] = (
-        resp['oauth_token'],
-        resp['oauth_token_secret']
-    )
-    session['facebook_user'] = resp['screen_name']
-
-    flash('You were signed in as %s' % resp['screen_name'])
-    return redirect(next_url)
-
-'''resp = github.authorized_response()
-   if resp is None:
         session.clear()
         message = 'Access denied: reason=' + request.args['error'] + ' error=' + request.args['error_description'] + ' full=' + pprint.pformat(request.args)
     else:
         try:
-            session['github_token'] = (resp['access_token'], '') #save the token to prove that the user logged in
-            session['user_data']=github.get('user').data
-            message='You were successfully logged in as ' + session['user_data']['login']
+            session['facebook_token'] = (
+                resp['oauth_token'],
+                resp['oauth_token_secret']
+            )
+            session['facebook_user'] = resp['screen_name']
+
+            ('You were signed in as %s' % resp['screen_name'])
+
         except Exception as inst:
             session.clear()
             print(inst)
             message='Unable to login, please try again.  '
-    return render_template('message.html', message=message)'''
+    return render_template('home.html', message=message)
 
 if __name__=="__main__":
-    app.run(debug=False)
+    app.run(debug=True)
