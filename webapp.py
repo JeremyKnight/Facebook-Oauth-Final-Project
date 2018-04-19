@@ -45,7 +45,7 @@ def authorized():
     #
     # flash('You were signed in as %s' % resp['screen_name'])
     # return redirect(next_url)
-    print(request.args)
+    resp = None
     try:
         resp = facebook.authorized_response()
     except Exception as inst:
