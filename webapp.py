@@ -46,52 +46,52 @@ def facebook_callback():
     if access_token == "undefined":
         print("You denied the request to sign in.")
 
-    session['facebook_oauth_token'] = resp['access_token']
+    session['facebook_oauth_token'] = access_token
 
     graph = facebooksdk.GraphAPI(access_token)
     profile = graph.get_object("me")
 
-@app.route('/authorized')
-def authorized():
-    #the facebook lines might not work
-    # next_url = request.args.get('next') or url_for('index')
-    # if resp is None:
-    #     flash(u'You denied the request to sign in.')
-    #     session.clear()
-    #     return redirect(next_url)
-    #
-    # session['facebook_token'] = (
-    #     resp['oauth_token'],
-    #     resp['oauth_token_secret']
-    # )
-    # session['facebook_user'] = resp['screen_name']
-    #
-    # flash('You were signed in as %s' % resp['screen_name'])
-    # return redirect(next_url)
-    resp = None
-    try:
-        resp = facebook.authorized_response()
-    except Exception as inst:
-        print(inst)
-
-    if resp is None:
-        session.clear()
-        message = 'Access denied: reason=' + request.args['error'] + ' error=' + request.args['error_description'] + ' full=' + pprint.pformat(request.args)
-        print(message)
-    else:
-        try:
-            session['facebook_oauth_token'] = (resp['access_token'], '')
-            session['facebook_oauth_token_secret'] = resp['oauth_token_secret']
-
-            session['facebook_user'] = resp['screen_name']
-
-            ('You were signed in as %s' % resp['screen_name'])
-
-        except Exception as inst:
-            session.clear()
-            print(inst)
-            message='Unable to login, please try again.  '
-    return render_template('home.html', message=message)
+# @app.route('/authorized')
+# def authorized():
+#     #the facebook lines might not work
+#     # next_url = request.args.get('next') or url_for('index')
+#     # if resp is None:
+#     #     flash(u'You denied the request to sign in.')
+#     #     session.clear()
+#     #     return redirect(next_url)
+#     #
+#     # session['facebook_token'] = (
+#     #     resp['oauth_token'],
+#     #     resp['oauth_token_secret']
+#     # )
+#     # session['facebook_user'] = resp['screen_name']
+#     #
+#     # flash('You were signed in as %s' % resp['screen_name'])
+#     # return redirect(next_url)
+#     resp = None
+#     try:
+#         resp = facebook.authorized_response()
+#     except Exception as inst:
+#         print(inst)
+#
+#     if resp is None:
+#         session.clear()
+#         message = 'Access denied: reason=' + request.args['error'] + ' error=' + request.args['error_description'] + ' full=' + pprint.pformat(request.args)
+#         print(message)
+#     else:
+#         try:
+#             session['facebook_oauth_token'] = (resp['access_token'], '')
+#             session['facebook_oauth_token_secret'] = resp['oauth_token_secret']
+#
+#             session['facebook_user'] = resp['screen_name']
+#
+#             ('You were signed in as %s' % resp['screen_name'])
+#
+#         except Exception as inst:
+#             session.clear()
+#             print(inst)
+#             message='Unable to login, please try again.  '
+#     return render_template('home.html', message=message)
 
 #the tokengetter is automatically called to check who is logged in.
 @facebook.tokengetter
