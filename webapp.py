@@ -26,7 +26,7 @@ def render_main():
 
 @app.route('/login')
 def login():
-    return facebook.authorize(callback=url_for('authorized', _external=True, _scheme='https')) #callback URL must match the pre-configured callback URL
+    return facebook.authorize(callback=url_for('translate', _external=True, _scheme='https')) #callback URL must match the pre-configured callback URL
 
 @app.route('/translate', methods=['GET'])
 def facebook_translate():
