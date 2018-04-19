@@ -45,8 +45,11 @@ def authorized():
     #
     # flash('You were signed in as %s' % resp['screen_name'])
     # return redirect(next_url)
+    try:
+        resp = facebook.authorized_response()
+    except Exception as inst:
+        print(inst)
 
-    resp = facebook.authorized_response()
     if resp is None:
         session.clear()
         message = 'Access denied: reason=' + request.args['error'] + ' error=' + request.args['error_description'] + ' full=' + pprint.pformat(request.args)
