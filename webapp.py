@@ -56,7 +56,7 @@ def authorized(resp):
                 resp['oauth_token'],
                 resp['oauth_token_secret']
             )
-            session['facebook_user'] = resp['screen_name']
+            # session['facebook_user'] = resp['screen_name']
 
             ('You were signed in as %s' % resp['screen_name'])
 
