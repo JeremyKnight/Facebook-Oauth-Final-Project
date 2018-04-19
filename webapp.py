@@ -49,8 +49,9 @@ def facebook_callback():
 
     session['facebook_oauth_token'] = access_token
 
-    graph = facebooksdk.GraphAPI(access_token)
+    graph = facebook.GraphAPI(access_token)
     profile = graph.get_object("me")
+    print(profile)
 
 # @app.route('/authorized')
 # def authorized():
