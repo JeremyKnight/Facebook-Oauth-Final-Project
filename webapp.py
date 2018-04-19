@@ -29,7 +29,7 @@ def login():
     return facebook.authorize(callback=url_for('authorized', _external=True, _scheme='https')) #callback URL must match the pre-configured callback URL
 
 @app.route('/authorized')
-def authorized(resp):
+def authorized():
     #the facebook lines might not work
     # next_url = request.args.get('next') or url_for('index')
     # if resp is None:
@@ -46,7 +46,7 @@ def authorized(resp):
     # flash('You were signed in as %s' % resp['screen_name'])
     # return redirect(next_url)
 
-    # resp = facebook.authorized_response()
+    resp = facebook.authorized_response()
     if resp is None:
         session.clear()
         message = 'Access denied: reason=' + request.args['error'] + ' error=' + request.args['error_description'] + ' full=' + pprint.pformat(request.args)
