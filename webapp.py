@@ -28,6 +28,27 @@ def render_main():
 def login():
     return facebook.authorize(callback=url_for('authorized', _external=True, _scheme='https')) #callback URL must match the pre-configured callback URL
 
+@app.route('/translate', methods=['GET'])
+def facebook_translate():
+  # Facebook responds with the access token as ?#access_token,
+  # rather than ?access_token, which is only accessible to the browser.
+  # This part is where things get really, really dumb.
+  return '''  <script type="text/javascript">
+    var token = window.location.href.split("access_token=")[1];
+    window.location = "/facebook/callback?access_token=" + token;
+  </script> '''
+
+@app.route('/facebook/callback', methods=['GET', 'POST'])
+def facebook_callback():
+    print("Got Here")
+    access_token = request.args.get("access_token")
+
+    if access_token == "undefined":
+    print("You denied the request to sign in.")
+
+    graph = facebooksdk.GraphAPI(access_token)
+    profile = graph.get_object("me")
+
 @app.route('/authorized')
 def authorized():
     #the facebook lines might not work
@@ -57,7 +78,7 @@ def authorized():
         print(message)
     else:
         try:
-            session['facebook_oauth_token'] = resp['oauth_token'],
+            session['facebook_oauth_token'] = (resp['access_token'], '')
             session['facebook_oauth_token_secret'] = resp['oauth_token_secret']
 
             session['facebook_user'] = resp['screen_name']
