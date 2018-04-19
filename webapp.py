@@ -35,10 +35,10 @@ def facebook_translate():
   # This part is where things get really, really dumb.
   return '''  <script type="text/javascript">
     var token = window.location.href.split("access_token=")[1];
-    window.location = "/facebook/callback?access_token=" + token;
+    window.location = "/callback?access_token=" + token;
   </script> '''
 
-@app.route('/facebook/callback', methods=['GET', 'POST'])
+@app.route('/callback', methods=['GET', 'POST'])
 def facebook_callback():
     print("Got Here")
     access_token = request.args.get("access_token")
