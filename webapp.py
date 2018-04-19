@@ -44,7 +44,7 @@ def facebook_callback():
     access_token = request.args.get("access_token")
 
     if access_token == "undefined":
-    print("You denied the request to sign in.")
+        print("You denied the request to sign in.")
 
     session['facebook_oauth_token'] = resp['access_token']
 
