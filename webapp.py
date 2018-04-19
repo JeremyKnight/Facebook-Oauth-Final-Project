@@ -26,28 +26,28 @@ def render_main():
 
 @app.route('/login')
 def login():
-    return facebook.authorize(callback=url_for('translate', _external=True, _scheme='https')) #callback URL must match the pre-configured callback URL
+    return facebook.authorize(callback=url_for('authorized', _external=True, _scheme='https')) #callback URL must match the pre-configured callback URL
 
-@app.route('/translate', methods=['GET'])
-def facebook_translate():
-  # Facebook responds with the access token as ?#access_token,
-  # rather than ?access_token, which is only accessible to the browser.
-  # This part is where things get really, really dumb.
-  return '''  <script type="text/javascript">
-    var token = window.location.href.split("access_token=")[1];
-    window.location = "/callback?access_token=" + token;
-  </script> '''
-
-@app.route('/callback', methods=['GET', 'POST'])
-def facebook_callback():
-    print("Got Here")
-    access_token = request.args.get("access_token")
-
-    if access_token == "undefined":
-    print("You denied the request to sign in.")
-
-    graph = facebooksdk.GraphAPI(access_token)
-    profile = graph.get_object("me")
+# @app.route('/translate', methods=['GET'])
+# def facebook_translate():
+#   # Facebook responds with the access token as ?#access_token,
+#   # rather than ?access_token, which is only accessible to the browser.
+#   # This part is where things get really, really dumb.
+#   return '''  <script type="text/javascript">
+#     var token = window.location.href.split("access_token=")[1];
+#     window.location = "/callback?access_token=" + token;
+#   </script> '''
+#
+# @app.route('/callback', methods=['GET', 'POST'])
+# def facebook_callback():
+#     print("Got Here")
+#     access_token = request.args.get("access_token")
+#
+#     if access_token == "undefined":
+#     print("You denied the request to sign in.")
+#
+#     graph = facebooksdk.GraphAPI(access_token)
+#     profile = graph.get_object("me")
 
 @app.route('/authorized')
 def authorized():
