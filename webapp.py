@@ -57,10 +57,9 @@ def authorized():
         print(message)
     else:
         try:
-            session['facebook_token'] = (
-                resp['oauth_token'],
-                resp['oauth_token_secret']
-            )
+            session['facebook_oauth_token'] = resp['oauth_token'],
+            session['facebook_oauth_token_secret'] = resp['oauth_token_secret']
+
             session['facebook_user'] = resp['screen_name']
 
             ('You were signed in as %s' % resp['screen_name'])
@@ -70,6 +69,11 @@ def authorized():
             print(inst)
             message='Unable to login, please try again.  '
     return render_template('home.html', message=message)
+
+#the tokengetter is automatically called to check who is logged in.
+@facebook.tokengetter
+def get_facebook_oauth_token():
+    return session.get('facebook_oauth_token')
 
 if __name__=="__main__":
     app.run(debug=True)
