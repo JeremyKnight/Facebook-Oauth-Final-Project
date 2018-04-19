@@ -1,20 +1,40 @@
+
+
 <!doctype html>
   <html>
     <head>
       <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-      
+
       <!-- HTTPS required. HTTP will give a 403 forbidden response -->
       <script src="https://sdk.accountkit.com/en_US/sdk.js"></script>
-      
-      
+
+
       <title>{% block title %}{% endblock %} </title>
     </head>
 
     <body>
+        <script>
+                  window.fbAsyncInit = function() {
+                    FB.init({
+                      appId            : '874728239365777',
+                      autoLogAppEvents : true,
+                      xfbml            : true,
+                      version          : 'v2.12'
+                    });
+                  };
+
+                  (function(d, s, id){
+                     var js, fjs = d.getElementsByTagName(s)[0];
+                     if (d.getElementById(id)) {return;}
+                     js = d.createElement(s); js.id = id;
+                     js.src = "https://connect.facebook.net/en_US/sdk.js";
+                     fjs.parentNode.insertBefore(js, fjs);
+                   }(document, 'script', 'facebook-jssdk'));
+        </script>
        {% include 'navbar.html' %}
-      
+
       <div id="content">{% block content %}{% endblock %}</div>
-      
+
 
       <!--input value="+1" id="country_code" />
       <input placeholder="phone number" id="phone_number"/>
@@ -23,11 +43,11 @@
       <input placeholder="email" id="email"/>
       <button onclick="emailLogin();">Login via Email</button-->
 
-    
-      
+
+
 
     </body>
-    
+
   <footer>
     <p>made in china  &copy; china</p>
   </footer>
