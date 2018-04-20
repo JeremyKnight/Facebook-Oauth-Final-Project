@@ -48,10 +48,10 @@ def facebook_callback():
         print("You denied the request to sign in.")
 
     session['facebook_oauth_token'] = access_token
-    # 
+    #
     # graph = facebook.GraphAPI(access_token)
     # profile = graph.get_object("me")
-    print(profile)
+    # print(profile)
 
 # @app.route('/authorized')
 # def authorized():
