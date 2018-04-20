@@ -49,7 +49,7 @@ def facebook_callback():
 
     session['facebook_oauth_token'] = access_token
 
-    return render_template('home.html')
+
     #
     # graph = facebook.GraphAPI(access_token)
     # profile = graph.get_object("me")
