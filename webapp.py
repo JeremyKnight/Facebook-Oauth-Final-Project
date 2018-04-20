@@ -25,48 +25,31 @@ facebook = oauth.remote_app(
 def render_main():
     return render_template('home.html')
 
-# @app.route('/login')
-# def login():
-#     return facebook.authorize(callback=url_for('facebook_translate', _external=True, _scheme='https')) #callback URL must match the pre-configured callback URL
-
 @app.route('/login')
 def login():
-    return facebook.authorize(callback=url_for('facebook_authorized',
-        next=request.args.get('next') or request.referrer or None,
-        _external=True))
+    return facebook.authorize(callback=url_for('facebook_translate', _external=True, _scheme='https')) #callback URL must match the pre-configured callback URL
 
-@app.route('/login/authorized')
-@facebook.authorized_handler
-def facebook_authorized(resp):
-    if resp is None:
-        return 'Access denied: reason=%s error=%s' % (
-            request.args['error_reason'],
-            request.args['error_description']
-        )
-    session['oauth_token'] = (resp['access_token'], '')
-    me = facebook.get('/me')
-    return 'Logged in as id=%s name=%s redirect=%s' % \
-        (me.data['id'], me.data['name'], request.args.get('next'))
+@app.route('/translate', methods=['GET'])
+def facebook_translate():
+  # Facebook responds with the access token as ?#access_token,
+  # rather than ?access_token, which is only accessible to the browser.
+  # This part is where things get really, really dumb.
+  return '''  <script type="text/javascript">
+    var token = window.location.href.split("access_token=")[1];
+    window.location = "/callback?access_token=" + token;
+  </script> '''
 
-# @app.route('/translate', methods=['GET'])
-# def facebook_translate():
-#   # Facebook responds with the access token as ?#access_token,
-#   # rather than ?access_token, which is only accessible to the browser.
-#   # This part is where things get really, really dumb.
-#   return '''  <script type="text/javascript">
-#     var token = window.location.href.split("access_token=")[1];
-#     window.location = "/callback?access_token=" + token;
-#   </script> '''
+@app.route('/callback', methods=['GET', 'POST'])
+def facebook_callback():
+    print("Got Here")
+    access_token = request.args.get("access_token")
 
-# @app.route('/callback', methods=['GET', 'POST'])
-# def facebook_callback():
-#     print("Got Here")
-#     access_token = request.args.get("access_token")
-#
-#     if access_token == "undefined":
-#         print("You denied the request to sign in.")
-#
-#     session['facebook_oauth_token'] = access_token
+    if access_token == "undefined":
+        print("You denied the request to sign in.")
+
+    session['facebook_oauth_token'] = access_token
+
+    return render_template('home.html')
     #
     # graph = facebook.GraphAPI(access_token)
     # profile = graph.get_object("me")
